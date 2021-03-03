@@ -19,7 +19,7 @@ impl Singlepass {
     /// specified.
     pub fn new() -> Self {
         Self {
-            enable_nan_canonicalization: true,
+            enable_nan_canonicalization: false,
             enable_stack_check: false,
             middlewares: vec![],
         }
@@ -48,9 +48,8 @@ impl Singlepass {
 }
 
 impl CompilerConfig for Singlepass {
-    fn enable_pic(&mut self) {
-        // Do nothing, since singlepass already emits
-        // PIC code.
+    fn enable_nan_canonicalization(&mut self) {
+        self.enable_nan_canonicalization = true;
     }
 
     /// Transform it into the compiler

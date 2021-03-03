@@ -99,6 +99,7 @@ pub struct wasm_config_t {
     engine: wasmer_engine_t,
     #[cfg(feature = "compiler")]
     compiler: wasmer_compiler_t,
+    nan_canonicalization: bool,
     pub(super) features: Option<Box<wasmer_features_t>>,
     pub(super) target: Option<Box<wasmer_target_t>>,
 }
@@ -267,6 +268,45 @@ pub extern "C" fn wasm_config_set_compiler(
 #[no_mangle]
 pub extern "C" fn wasm_config_set_engine(config: &mut wasm_config_t, engine: wasmer_engine_t) {
     config.engine = engine;
+}
+
+/// Updates the configuration to enable NaN canonicalization.
+///
+/// This is a Wasmer-specific function.
+///
+/// # Example
+///
+/// ```rust
+/// # use inline_c::assert_c;
+/// # fn main() {
+/// #    (assert_c! {
+/// # #include "tests/wasmer_wasm.h"
+/// #
+/// int main() {
+///     // Create the configuration.
+///     wasm_config_t* config = wasm_config_new();
+///
+///     // Enable NaN canonicalization.
+///     wasm_config_enable_nan_canonicalization(config);
+///
+///     // Create the engine.
+///     wasm_engine_t* engine = wasm_engine_new_with_config(config);
+///
+///     // Check we have an engine!
+///     assert(engine);
+///
+///     // Free everything.
+///     wasm_engine_delete(engine);
+///
+///     return 0;
+/// }
+/// #    })
+/// #    .success();
+/// # }
+/// ```
+#[no_mangle]
+pub extern "C" fn wasm_config_enable_nan_canonicalization(config: &mut wasm_config_t) {
+    config.nan_canonicalization = true;
 }
 
 /// An engine is used by the store to drive the compilation and the
@@ -470,6 +510,10 @@ pub extern "C" fn wasm_engine_new_with_config(
                     }
                 },
             };
+
+            if (config.nan_canonicalization) {
+                compiler_config.enable_nan_canonicalization();
+            }
 
             let inner: Arc<dyn Engine + Send + Sync> = match config.engine {
                 wasmer_engine_t::JIT => {

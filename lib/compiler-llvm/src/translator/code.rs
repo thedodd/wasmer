@@ -201,6 +201,7 @@ impl FuncTranslator {
             wasm_module,
             symbol_registry,
             abi: &*self.abi,
+            config,
         };
         fcg.ctx.add_func(
             func_index,
@@ -859,6 +860,10 @@ impl<'ctx, 'a> LLVMFunctionCodeGenerator<'ctx, 'a> {
         value: BasicValueEnum<'ctx>,
         info: ExtraInfo,
     ) -> BasicValueEnum<'ctx> {
+        if !self.config.enable_nan_canonicalization {
+            return value;
+        }
+
         if info.has_pending_f32_nan() {
             if value.get_type().is_vector_type()
                 || value.get_type() == self.intrinsics.i128_ty.as_basic_type_enum()
@@ -1287,6 +1292,7 @@ pub struct LLVMFunctionCodeGenerator<'ctx, 'a> {
     unreachable_depth: usize,
     memory_styles: &'a PrimaryMap<MemoryIndex, MemoryStyle>,
     _table_styles: &'a PrimaryMap<TableIndex, TableStyle>,
+    config: &'a LLVM,
 
     // This is support for stackmaps:
     /*

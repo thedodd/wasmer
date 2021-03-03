@@ -185,12 +185,19 @@ impl Cranelift {
 }
 
 impl CompilerConfig for Cranelift {
+    /// Emit code suitable for dlopen.
     fn enable_pic(&mut self) {
         self.enable_pic = true;
     }
 
+    /// Whether to verify compiler IR.
     fn enable_verifier(&mut self) {
         self.enable_verifier = true;
+    }
+
+    /// Whether to canonicalize NaNs.
+    fn enable_nan_canonicalization(&mut self) {
+        self.enable_nan_canonicalization = true;
     }
 
     /// Transform it into the compiler

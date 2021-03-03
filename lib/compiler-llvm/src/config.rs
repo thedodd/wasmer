@@ -206,6 +206,11 @@ impl CompilerConfig for LLVM {
         self.enable_verifier = true;
     }
 
+    /// Whether to canonicalize NaNs.
+    fn enable_nan_canonicalization(&mut self) {
+        self.enable_nan_canonicalization = true;
+    }
+
     /// Transform it into the compiler.
     fn compiler(self: Box<Self>) -> Box<dyn Compiler> {
         Box::new(LLVMCompiler::new(*self))

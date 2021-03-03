@@ -34,6 +34,9 @@ cranelift::spec::simd::simd_i8x16_sat_arith on aarch64
 cranelift::spec::simd::simd_lane on aarch64
 cranelift::spec::skip_stack_guard_page on aarch64
 
+# TODO(https://github.com/wasmerio/wasmer/pull/2161): Need to review NaN canonicalization
+llvm::spec::float_exprs
+llvm::spec::simd::simd_f64x2_arith
 
 # SIMD changes
 # due to breaking changes in the SIMD proposal, we have to disable these spec tests

@@ -36,6 +36,12 @@ pub trait CompilerConfig {
         // in case they create an IR that they can verify.
     }
 
+    /// Enable NaN canonicalization.
+    fn enable_nan_canonicalization(&mut self) {
+        // By default we do nothing, each backend will need to customize this
+        // in case they create an IR that they can verify.
+    }
+
     /// Gets the custom compiler config
     fn compiler(self: Box<Self>) -> Box<dyn Compiler>;
 

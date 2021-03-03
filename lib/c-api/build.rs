@@ -468,6 +468,7 @@ fn exclude_items_from_wasm_c_api(builder: Builder) -> Builder {
         .exclude_item("wasi_get_wasi_version")
         .exclude_item("wasi_version_t")
         .exclude_item("wasm_config_set_compiler")
+        .exclude_item("wasm_config_enable_nan_canonicalization")
         .exclude_item("wasm_config_set_engine")
         .exclude_item("wasm_config_set_features")
         .exclude_item("wasm_config_set_target")

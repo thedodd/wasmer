@@ -247,6 +247,8 @@ bool wasi_get_unordered_imports(const wasm_store_t *store,
 wasi_version_t wasi_get_wasi_version(const wasm_module_t *module);
 #endif
 
+void wasm_config_enable_nan_canonicalization(wasm_config_t *config);
+
 #if defined(WASMER_COMPILER_ENABLED)
 void wasm_config_set_compiler(wasm_config_t *config, wasmer_compiler_t compiler);
 #endif
